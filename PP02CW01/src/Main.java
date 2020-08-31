@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class Main {
 
     public static Scanner input; //New Scanner object
-    private static Room[] hotelRoom;//Declared Object array as a static variable so that it can be called from anywhere in the class
+    private static String[] hotelRoom;//Declared Object array as a static variable so that it can be called from anywhere in the class
     private static String name; //Variable to hold name of customer
     private static String userInput; //Variable to hold user input from stdin
     private static String fileName; //Variable to hold user declared filename to red and write hotel data
@@ -32,9 +32,9 @@ public class Main {
 
         System.out.println("Priming Initialization Process...");
 
-        hotelRoom = new Room[10];
+        hotelRoom = new String[10];
         for (int room = 0; room < hotelRoom.length; room++) {
-            hotelRoom[room] = new Room();
+            hotelRoom[room] = "empty";
         }
 
         System.out.println("Initialization Complete!");
@@ -98,7 +98,7 @@ public class Main {
                 case "l":
                     System.out.println("\n            Reading From File");
                     System.out.println("--------------------------------------------------");
-                    readFromFile(); //Method to read and display room details from user defined file
+                    readHotelFromFile(); //Method to read and display room details from user defined file
                     break;
                 case "o":
                     System.out.println("\n         Rooms in Alphabetical Order");
@@ -122,10 +122,10 @@ public class Main {
     //Printing out array elements(rooms) after checking if they are occupied or not through a selection structure 
     private static void viewRooms() {
         for (int room = 0; room < hotelRoom.length; room++) {
-            if (hotelRoom[room].getName().equals("empty")) {
-                System.out.println("Room " + (room + 1) + " is " + hotelRoom[room].getName());
+            if (hotelRoom[room]=="empty") {
+                System.out.println("Room " + (room + 1) + " is " + hotelRoom[room]);
             } else {
-                System.out.println("Room " + (room + 1) + " is being occupied by " + hotelRoom[room].getName());
+                System.out.println("Room " + (room + 1) + " is being occupied by " + hotelRoom[room]);
             }
         }
     }
@@ -133,7 +133,7 @@ public class Main {
     //Printing out array elements(rooms) only if they are "empty", through a selection structure 
     private static void emptyRooms() {
         for (int room = 0; room < hotelRoom.length; room++) {
-            if (hotelRoom[room].getName().equals("empty")) {
+            if (hotelRoom[room]=="empty") {
                 System.out.println("Room " + (room + 1) + " is vacant and available for reservation!");
             }
         }
@@ -159,12 +159,12 @@ public class Main {
         }
 
         //Validating if the room is "empty"(vacant). Room is assigned to new customer only if it is vacant or else it will display that the room is occupied
-        if (hotelRoom[roomNo - 1].getName().equals("empty")) {
+        if (hotelRoom[roomNo - 1]=="empty") {
             System.out.print("\nEnter Name for Room " + roomNo + ": ");
             roomOwner = input.next();
             System.out.println("");
 
-            hotelRoom[roomNo - 1].setName(roomOwner);
+            hotelRoom[roomNo - 1]=roomOwner;
 
             System.out.println("Customer " + roomOwner + " has been successfully booked into Room " + roomNo);
         } else {
@@ -176,8 +176,8 @@ public class Main {
     //Comparing user input name to the current index element in the array and reinitializing that room as "empty" once again     
     private static void deleteCustomer(String name) {
         for (int room = 0; room < hotelRoom.length; room++) {
-            if (hotelRoom[room].getName().equals(name)) {
-                hotelRoom[room] = new Room();
+            if (hotelRoom[room].equals(name)) {
+                hotelRoom[room] = "empty";
                 System.out.println("\nDeletion Complete");
             }
         }
@@ -187,7 +187,7 @@ public class Main {
     private static int findRoomByName(String name) {
         int index = 0;
         for (int room = 0; room < hotelRoom.length; room++) {
-            if (hotelRoom[room].getName().equals(name)) {
+            if (hotelRoom[room].equals(name)) {
                 index = room;
             }
         }
@@ -203,21 +203,20 @@ public class Main {
         hotelWrite.write("-------------------------------------\n");
 
         for (int room = 0; room < hotelRoom.length; room++) {
-            if (hotelRoom[room].getName().equals("empty")) {
-                hotelWrite.write("Room " + (room + 1) + " is " + hotelRoom[room].getName() + "\n");
+            if (hotelRoom[room].equals("empty")) {
+                hotelWrite.write("Room " + (room + 1) + " is " + hotelRoom[room] + "\n");
             } else {
-                hotelWrite.write("Room " + (room + 1) + " is being occupied by " + hotelRoom[room].getName() + "\n");
+                hotelWrite.write("Room " + (room + 1) + " is being occupied by " + hotelRoom[room] + "\n");
             }
         }
         hotelWrite.close();
         System.out.println("\nHotel Program Data successfully written to " + fileName + "   file");
     }
 
-    private static void readFromFile() throws Exception {
+    private static void readHotelFromFile() throws Exception {
         Scanner hotelRead = new Scanner(new BufferedReader(new FileReader(fileName)));
-        //Reading user defined file and buffering it into memory
         String fileLine;
-        while (hotelRead.hasNext()) { //While there exists more lines it will print all lines in the file through the while loop
+        while (hotelRead.hasNext()) { 
             fileLine = hotelRead.nextLine();
             System.out.println(fileLine);
         }
@@ -226,19 +225,18 @@ public class Main {
     }
 
     private static void roomsInOrder() {
-        int index = 0;//Variable to hold the index of the original array to display room number
+        int index = 0;
 
-        String hotelSorted[] = new String[hotelRoom.length];//Created a new array to undergo sorting
+        String hotelSorted[] = new String[hotelRoom.length];
         for (int room = 0; room < hotelRoom.length; room++) {
-            hotelSorted[room] = hotelRoom[room].getName();
+            hotelSorted[room] = hotelRoom[room];
         }
         Arrays.sort(hotelSorted);
 
-        //Nested for-loops to iterate and print room owners' names and particular room(now sorted)
         for (int room = 0; room < hotelSorted.length; room++) {
             if (!hotelSorted[room].equals("empty")) {
                 for (int i = 0; i < hotelRoom.length; i++) {
-                    if (hotelSorted[room].equals(hotelRoom[i].getName())) {
+                    if (hotelSorted[room].equals(hotelRoom[i])) {
                         index = i;
                     }
                 }
