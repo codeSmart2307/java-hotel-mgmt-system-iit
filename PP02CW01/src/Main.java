@@ -215,9 +215,8 @@ public class Main {
 
     private static void readHotelFromFile() throws Exception {
         Scanner hotelRead = new Scanner(new BufferedReader(new FileReader(fileName)));
-        //Reading user defined file and buffering it into memory
         String fileLine;
-        while (hotelRead.hasNext()) { //While there exists more lines it will print all lines in the file through the while loop
+        while (hotelRead.hasNext()) { 
             fileLine = hotelRead.nextLine();
             System.out.println(fileLine);
         }
@@ -226,15 +225,14 @@ public class Main {
     }
 
     private static void roomsInOrder() {
-        int index = 0;//Variable to hold the index of the original array to display room number
+        int index = 0;
 
-        String hotelSorted[] = new String[hotelRoom.length];//Created a new array to undergo sorting
+        String hotelSorted[] = new String[hotelRoom.length];
         for (int room = 0; room < hotelRoom.length; room++) {
             hotelSorted[room] = hotelRoom[room];
         }
         Arrays.sort(hotelSorted);
 
-        //Nested for-loops to iterate and print room owners' names and particular room(now sorted)
         for (int room = 0; room < hotelSorted.length; room++) {
             if (!hotelSorted[room].equals("empty")) {
                 for (int i = 0; i < hotelRoom.length; i++) {
